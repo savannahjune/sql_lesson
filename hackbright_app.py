@@ -7,9 +7,12 @@ def get_student_by_github(github):
     query = """SELECT first_name, last_name, github FROM Students WHERE github = ?"""
     DB.execute(query, (github,))
     row = DB.fetchone()
-    print """\
+    if row:
+        print """\
 Student: %s %s
 Github account: %s"""%(row[0], row[1], row[2])
+    else:
+        print "Student does not exist."
 
 def connect_to_db():
     global DB, CONN
@@ -33,7 +36,10 @@ def find_projects_by_title(project_title):
     query = """SELECT title, description FROM Projects WHERE title = ?"""
     DB.execute(query, (project_title, ))
     row = DB.fetchone()
-    print '%s, %s' % (row[0], row[1])
+    if row:
+        print "%s, %s" % (row[0], row[1])
+    else:
+        print "Project does not exist."
 
 def get_grade_by_student(project_title, github):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
@@ -41,7 +47,10 @@ def get_grade_by_student(project_title, github):
                WHERE project_title = ? AND github = ?"""
     DB.execute(query, (project_title, github))
     row = DB.fetchone()
-    print 'Student %s %s got a grade of %s' % (row[0], row[1], row[2])
+    if row:
+        print "Student %s %s got a grade of %s" % (row[0], row[1], row[2])
+    else:
+        print "Project or student does not exist."
 
 def show_all_grades(first_name, last_name):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
@@ -49,9 +58,12 @@ def show_all_grades(first_name, last_name):
                WHERE Students.first_name = ? AND Students.last_name = ?"""
     DB.execute(query, (first_name, last_name))
     data = DB.fetchall()
-    print "Student: %s %s" % (data[0][0], data[0][1])
-    for item in data:
-        print item[2]
+    if data:
+        print "Student: %s %s" % (data[0][0], data[0][1])
+        for item in data:
+            print item[2]
+    else:
+        print "Student does not exist."
 
 def give_grade_student(github, project_title, grade):
     query = """INSERT into Grades values (?, ?, ?)"""
@@ -99,6 +111,3 @@ Show all grades for student: Enter 'show_all_grades' followed by the student's f
 
 if __name__ == "__main__":
     main()
-
-# to do :
-# check for errors
