@@ -61,6 +61,7 @@ def give_grade_student(github, project_title, grade):
 
 def main():
     connect_to_db()
+
     command = None
     while command != "quit":
         input_string = raw_input("HBA Database> ")
@@ -87,3 +88,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# to do :
+# add ability for spaces
+# check for errors
+# help text
