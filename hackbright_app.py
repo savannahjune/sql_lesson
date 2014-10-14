@@ -23,7 +23,7 @@ def make_new_student(first_name, last_name, github):
     print "Successfully added student: %s %s" % (first_name, last_name)
 
 def make_new_project(project_title, description, max_grade):
-    query = """INSERT into Projects (title, description, max_grade) values(?, ?, ?)"""
+    query = """INSERT into Projects (title, description, max_grade) values (?, ?, ?)"""
     DB.execute(query, (project_title, description, max_grade))
     CONN.commit()
     print "Successfully added project: %s %s %s" % (project_title, description, max_grade)
@@ -37,13 +37,16 @@ def find_projects_by_title(project_title):
 
 def get_grade_by_student(project_title, github):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
-               FROM Grades JOIN Students ON (Grades.student_github = Students.github) WHERE project_title = ? AND github = ?"""
+               FROM Grades JOIN Students ON (Grades.student_github = Students.github) 
+               WHERE project_title = ? AND github = ?"""
     DB.execute(query, (project_title, github))
     row = DB.fetchone()
     print 'Student %s %s got a grade of %s' % (row[0], row[1], row[2])
 
 def show_all_grades(first_name, last_name):
-    query = """SELECT Students.first_name, Students.last_name, Grades.grade FROM Grades JOIN Students ON (Grades.student_github = Students.github) WHERE Students.first_name = ? AND Students.last_name = ?"""
+    query = """SELECT Students.first_name, Students.last_name, Grades.grade 
+               FROM Grades JOIN Students ON (Grades.student_github = Students.github) 
+               WHERE Students.first_name = ? AND Students.last_name = ?"""
     DB.execute(query, (first_name, last_name))
     data = DB.fetchall()
     print "Student: %s %s" % (data[0][0], data[0][1])
