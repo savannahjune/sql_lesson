@@ -8,11 +8,9 @@ def get_student_by_github(github):
     DB.execute(query, (github,))
     row = DB.fetchone()
     if row:
-        print """\
-Student: %s %s
-Github account: %s"""%(row[0], row[1], row[2])
+        return row
     else:
-        print "Student does not exist."
+        return "Student does not exist."
 
 def connect_to_db():
     global DB, CONN
@@ -23,13 +21,13 @@ def make_new_student(first_name, last_name, github):
     query = """INSERT into Students values (?, ?, ?)"""
     DB.execute(query, (first_name, last_name, github))
     CONN.commit()
-    print "Successfully added student: %s %s" % (first_name, last_name)
+    return "Successfully added student: %s %s" % (first_name, last_name)
 
 def make_new_project(project_title, description, max_grade):
     query = """INSERT into Projects (title, description, max_grade) values (?, ?, ?)"""
     DB.execute(query, (project_title, description, max_grade))
     CONN.commit()
-    print "Successfully added project: %s, %s, %s" % (project_title, description, max_grade)
+    return "Successfully added project: %s, %s, %s" % (project_title, description, max_grade)
 
 
 def find_projects_by_title(project_title):
@@ -37,9 +35,9 @@ def find_projects_by_title(project_title):
     DB.execute(query, (project_title, ))
     row = DB.fetchone()
     if row:
-        print "%s, %s" % (row[0], row[1])
+        return "%s, %s" % (row[0], row[1])
     else:
-        print "Project does not exist."
+        return "Project does not exist."
 
 def get_grade_by_student(project_title, github):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
@@ -48,9 +46,9 @@ def get_grade_by_student(project_title, github):
     DB.execute(query, (project_title, github))
     row = DB.fetchone()
     if row:
-        print "Student %s %s got a grade of %s" % (row[0], row[1], row[2])
+        return "Student %s %s got a grade of %s" % (row[0], row[1], row[2])
     else:
-        print "Project or student does not exist."
+        return "Project or student does not exist."
 
 def show_all_grades(first_name, last_name):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
@@ -59,17 +57,17 @@ def show_all_grades(first_name, last_name):
     DB.execute(query, (first_name, last_name))
     data = DB.fetchall()
     if data:
-        print "Student: %s %s" % (data[0][0], data[0][1])
+        return "Student: %s %s" % (data[0][0], data[0][1])
         for item in data:
-            print item[2]
+            return item[2]
     else:
-        print "Student does not exist."
+        return "Student does not exist."
 
 def give_grade_student(github, project_title, grade):
     query = """INSERT into Grades values (?, ?, ?)"""
     DB.execute(query, (github, project_title, grade))
     CONN.commit()
-    print "Gave student %s grade: %s for project: %s" %(github, project_title, grade)
+    return "Gave student %s grade: %s for project: %s" %(github, project_title, grade)
 
 def main():
     connect_to_db()
@@ -96,7 +94,7 @@ def main():
         elif command == "show_all_grades":
             show_all_grades(*args)
         elif 'help' in command:
-            print """Be sure to comma separate all of your inputs with NO SPACES!\n
+            return """Be sure to comma separate all of your inputs with NO SPACES!\n
 Find student: Enter 'student' followed by the student's github username.\n
 Add student: Enter 'new_student' followed by the student's first name, last name, and github.\n
 Find project description: Enter 'project_title' followed by the project's title\n
@@ -105,7 +103,7 @@ Find student grade: Enter 'grade' followed by the project title and student's gi
 Give student grade: Enter 'give_grade' followed by the student's github, project title, and grade.\n
 Show all grades for student: Enter 'show_all_grades' followed by the student's first and last name."""
         else:
-            print "I'm sorry. I don't understand that command. Type 'help' for more information!"
+            return "I'm sorry. I don't understand that command. Type 'help' for more information!"
 
     CONN.close()
 
