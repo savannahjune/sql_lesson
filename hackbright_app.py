@@ -26,7 +26,7 @@ def make_new_project(project_title, description, max_grade):
     query = """INSERT into Projects (title, description, max_grade) values (?, ?, ?)"""
     DB.execute(query, (project_title, description, max_grade))
     CONN.commit()
-    print "Successfully added project: %s %s %s" % (project_title, description, max_grade)
+    print "Successfully added project: %s, %s, %s" % (project_title, description, max_grade)
 
 
 def find_projects_by_title(project_title):
@@ -65,12 +65,12 @@ def main():
     command = None
     while command != "quit":
         input_string = raw_input("HBA Database> ")
-        tokens = input_string.split()
+        tokens = input_string.split(',')
         command = tokens[0]
         args = tokens[1:]
 
         if command == "student":
-            get_student_by_github(*args) 
+            get_student_by_github(*args)
         elif command == "new_student":
             make_new_student(*args)
         elif command == "project_title":
@@ -83,6 +83,17 @@ def main():
             give_grade_student(*args)
         elif command == "show_all_grades":
             show_all_grades(*args)
+        elif 'help' in command:
+            print """Be sure to comma separate all of your inputs with NO SPACES!\n
+Find student: Enter 'student' followed by the student's github username.\n
+Add student: Enter 'new_student' followed by the student's first name, last name, and github.\n
+Find project description: Enter 'project_title' followed by the project's title\n
+Add project: Enter 'new_project' followed by the project title, description and max grade\n
+Find student grade: Enter 'grade' followed by the project title and student's github.\n
+Give student grade: Enter 'give_grade' followed by the student's github, project title, and grade.\n
+Show all grades for student: Enter 'show_all_grades' followed by the student's first and last name."""
+        else:
+            print "I'm sorry. I don't understand that command. Type 'help' for more information!"
 
     CONN.close()
 
@@ -90,6 +101,4 @@ if __name__ == "__main__":
     main()
 
 # to do :
-# add ability for spaces
 # check for errors
-# help text
