@@ -21,7 +21,7 @@ def make_new_student(first_name, last_name, github):
     query = """INSERT into Students values (?, ?, ?)"""
     DB.execute(query, (first_name, last_name, github))
     CONN.commit()
-    return "Successfully added student: %s %s" % (first_name, last_name)
+    return [first_name, last_name, github]
 
 def make_new_project(project_title, description, max_grade):
     query = """INSERT into Projects (title, description, max_grade) values (?, ?, ?)"""
@@ -47,7 +47,7 @@ def get_grades_by_project(project_title):
         return data
     else: 
         return "Project does not exist."
-            
+
 def get_grade_by_student(project_title, github):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
                FROM Grades JOIN Students ON (Grades.student_github = Students.github) 
