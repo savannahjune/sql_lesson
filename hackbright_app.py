@@ -39,6 +39,15 @@ def find_projects_by_title(project_title):
     else:
         return "Project does not exist."
 
+def get_grades_by_project(project_title):
+    query="""SELECT * FROM Grades WHERE project_title = ?"""
+    DB.execute(query, (project_title, ))
+    data = DB.fetchall()
+    if data:
+        return data
+    else: 
+        return "Project does not exist."
+            
 def get_grade_by_student(project_title, github):
     query = """SELECT Students.first_name, Students.last_name, Grades.grade 
                FROM Grades JOIN Students ON (Grades.student_github = Students.github) 
@@ -50,16 +59,15 @@ def get_grade_by_student(project_title, github):
     else:
         return "Project or student does not exist."
 
-def show_all_grades(first_name, last_name):
-    query = """SELECT Students.first_name, Students.last_name, Grades.grade 
+def show_all_grades(github):
+    query = """SELECT Students.first_name, Students.last_name, Grades.project_title, Grades.grade 
                FROM Grades JOIN Students ON (Grades.student_github = Students.github) 
-               WHERE Students.first_name = ? AND Students.last_name = ?"""
-    DB.execute(query, (first_name, last_name))
+               WHERE Students.github = ?"""
+    DB.execute(query, (github,))
     data = DB.fetchall()
     if data:
-        return "Student: %s %s" % (data[0][0], data[0][1])
-        for item in data:
-            return item[2]
+        return data
+
     else:
         return "Student does not exist."
 
@@ -68,6 +76,7 @@ def give_grade_student(github, project_title, grade):
     DB.execute(query, (github, project_title, grade))
     CONN.commit()
     return "Gave student %s grade: %s for project: %s" %(github, project_title, grade)
+
 
 def main():
     connect_to_db()

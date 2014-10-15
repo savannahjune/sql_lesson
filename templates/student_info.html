@@ -1,7 +1,12 @@
+<!DOCTYPE html>
 <html>
 <body>
-<h1>Student: {{first_name}} {{last_name}}</h1>
-<h2>Github account: {{github}}</h2>
+<h1>Student: {{ first_name }} {{ last_name }}</h1>
+<h2>Github account: {{ github }}</h2>
+{% for item in project_grades %}
+<h2><a href="/project_grades/{{ item[2] }}">Project: {{ item[2] }}</a></h2>
+<h2>Grade: {{ item[3] }}
+{% endfor %}
 <p>This student is the BEST!!!!</p>
 </body>
 </html>

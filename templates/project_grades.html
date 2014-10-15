@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Project: {{ project_grades[0][1] }}</h2>
+{% for item in project_grades %}
+<h2><a href="/student/?github={{ item[0] }}">Student Github: {{ item[0] }}</a></h2>
+<h2>Grade: {{ item[2] }}</h2>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,8 @@
+Grades
+CREATE TABLE Grades (student_github VARCHAR(30), project_title VARCHAR(30), grade INT);
+
+Students
+CREATE TABLE Students (first_name varchar(30), last_name varchar(30), github varchar(30));
+
+Projects
+CREATE TABLE Projects (id INTEGER PRIMARY KEY AUTOINCREMENT, title varchar(30), description TEXT, max_grade INT);
